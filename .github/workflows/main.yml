@@ -52,5 +52,6 @@ jobs:
         go build
         echo after the build
         ls -la
+        file nvdsync
 
 
