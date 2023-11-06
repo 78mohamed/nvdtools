@@ -46,8 +46,11 @@ jobs:
         #!bin/bash
         cd ./nvdtools/cmd
         go install ./...
+        echo before the build
+        ls -la
         cd nvdsync
         go build
+        echo after the build
         ls -la
 
 
