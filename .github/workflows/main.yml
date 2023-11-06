@@ -37,7 +37,11 @@ jobs:
       with:
         go-version: 1.13.x
 
-
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
     - name: cloning the repo
       run: git clone https://github.com/facebookincubator/nvdtools.git
@@ -50,4 +54,30 @@ jobs:
         cd nvdsync
         ls -la
 
+
+
+    - name: changing ownership
+      run: |
+        #!/bin/bash
+        cd ./nvdtools/cmd/nvdsync
+        echo "Workspace directory: $GITHUB_WORKSPACE"
+        sudo chown -R root:root $GITHUB_WORKSPACE
+        sudo chmod +x $GITHUB_WORKSPACE/*
+        sudo go build
+        ls -la
+
+    - name: sync s3 bucket
+      run: |
+        aws s3 sync s3://bucket-name/downloadedCveFeed downloadedCveFeed
+
+
+    - name: run nvd on the database
+      run: |
+        sudo ./nvdsync -cve_feed cve-1.1.json.gz downloadedCveFeed/
+
+
+
+    - name: sync upload to bucket
+      run: |
+        aws s3 sync downloadedCveFeed s3://bucket-name/downloadedCveFeed --delete
 
