@@ -1,16 +1,18 @@
 name: Deploy App to AWS
 
 on:
-  workflow_dispatch:
-    branches:
-    - main
   push:
     branches:
     - main
 
 jobs:
-  prodConsulting-deploy:
-    runs-on: ubuntu-latest
+  # Run unit and integration tests
+  tests:
+    strategy:
+      matrix:
+        go-version: [1.13.x]
+        os: [ubuntu-latest]
+    runs-on: ${{ matrix.os }}
     permissions:
       deployments: write
       contents: read
@@ -31,10 +33,14 @@ jobs:
           REF_BRANCH=${REF/refs\/tags\/${{ inputs.strip_tag_prefix }}/}
           echo "::set-output name=current_branch::$(eval printf "%s" "$REF_BRANCH")"
         fi
-    - name: Create GitHub deployment
-      uses: chrnorm/deployment-action@v2
-      id: deployment
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Install Go
+      uses: actions/setup-go@v2
       with:
-        token: '${{ github.token }}'
-        environment: production
-        ref: ${{ steps.git.outputs.current_branch }}
+        go-version: ${{ matrix.go-version }}
+    - name: Terraform Init
+      run: |
+        #!/bin/bash
+        ls -a
