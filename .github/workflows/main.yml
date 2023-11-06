@@ -1,0 +1,40 @@
+name: Deploy App to AWS
+
+on:
+  workflow_dispatch:
+    branches:
+    - main
+  push:
+    branches:
+    - main
+
+jobs:
+  prodConsulting-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      deployments: write
+      contents: read
+      statuses: write
+    steps:
+    - name: Get git output names
+      id: git
+      shell: bash
+      run: |
+        if [[ "${{ github.ref }}" != "refs/tags/"* ]]; then
+          if [[ ${{ github.event_name }} == 'pull_request' ]]; then
+            echo "::set-output name=current_branch::$HEAD_REF"
+          else
+            echo "::set-output name=current_branch::$REF_BRANCH"
+          fi
+        else
+          REF=$(printf "%q" "${{ github.ref }}")
+          REF_BRANCH=${REF/refs\/tags\/${{ inputs.strip_tag_prefix }}/}
+          echo "::set-output name=current_branch::$(eval printf "%s" "$REF_BRANCH")"
+        fi
+    - name: Create GitHub deployment
+      uses: chrnorm/deployment-action@v2
+      id: deployment
+      with:
+        token: '${{ github.token }}'
+        environment: production
+        ref: ${{ steps.git.outputs.current_branch }}
