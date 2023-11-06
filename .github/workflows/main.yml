@@ -51,5 +51,7 @@ jobs:
     - name: changing ownership
       run: |
         #!/bin/bash
-        cd ./cmd/nvdsync
+        #cd ./cmd/nvdsync
+        echo "Workspace directory: $GITHUB_WORKSPACE"
         ls -la
+        
