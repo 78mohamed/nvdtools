@@ -44,7 +44,7 @@ jobs:
 
     - name: installing nvdtools
       run: |
-       #!bin/bash
-       ls -la
+        cd ./nvdtools/cmd
+        go install ./...
 
 
