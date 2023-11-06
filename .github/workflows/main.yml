@@ -44,7 +44,10 @@ jobs:
 
     - name: installing nvdtools
       run: |
+        #!bin/bash
         cd ./nvdtools/cmd
         go install ./...
+        cd nvdsync
+        ls -la
 
 
