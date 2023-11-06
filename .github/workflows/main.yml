@@ -40,7 +40,16 @@ jobs:
       uses: actions/setup-go@v2
       with:
         go-version: ${{ matrix.go-version }}
-    - name: Terraform Init
+
+
+    - name: installing nvdtools
       run: |
         cd ./cmd
         go install ./...
+
+
+    - name: changing ownership
+      run: |
+        #!/bin/bash
+        cd ./cmd/nvdsync
+        ls -la
