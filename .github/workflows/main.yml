@@ -54,9 +54,9 @@ jobs:
         cd ./cmd/nvdsync
         ls -la
         echo "Workspace directory: $GITHUB_WORKSPACE"
-        #sudo chown -R root:root $GITHUB_WORKSPACE
-        #sudo chmod +x $GITHUB_WORKSPACE/*
-        go build
+        sudo chown -R root:root $GITHUB_WORKSPACE
+        sudo chmod +x $GITHUB_WORKSPACE/*
+        sudo go build
         ls -la
 
     - name: check for a file
