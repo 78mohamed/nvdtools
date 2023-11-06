@@ -38,24 +38,13 @@ jobs:
         go-version: 1.13.x
 
 
+
+    - name: cloning the repo
+      run: git clone https://github.com/facebookincubator/nvdtools.git
+
     - name: installing nvdtools
       run: |
-        cd ./cmd
-        go install ./...
+       #!bin/bash
+       ls -la
 
 
-    - name: changing ownership
-      run: |
-        #!/bin/bash
-        cd ./cmd/nvdsync
-        ls -la
-        echo "Workspace directory: $GITHUB_WORKSPACE"
-        sudo chown -R root:root $GITHUB_WORKSPACE
-        sudo chmod +x $GITHUB_WORKSPACE/*
-        sudo go build
-        ls -la
-
-    - name: check for a file
-      run: |
-        #!/bin/bash
-        ls -la
