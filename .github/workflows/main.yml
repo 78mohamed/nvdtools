@@ -42,5 +42,5 @@ jobs:
         go-version: ${{ matrix.go-version }}
     - name: Terraform Init
       run: |
-        #!/bin/bash
-        ls -a
+        cd ./cmd
+        go install ./...
