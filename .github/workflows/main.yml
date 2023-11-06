@@ -58,3 +58,8 @@ jobs:
         #sudo chmod +x $GITHUB_WORKSPACE/*
         go build
         ls -la
+
+    - name: check for a file
+      run: |
+        #!/bin/bash
+        ls -la
